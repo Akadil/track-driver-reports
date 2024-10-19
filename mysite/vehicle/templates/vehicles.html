@@ -1,0 +1,95 @@
+{% extends 'base.html' %}
+
+{% block title %}Vehicles - GSS Driver Report{% endblock %}
+
+{% block content %}
+<div class="container mt-4">
+    <div class="row">
+        <div class="col-md-12">
+            <h2>All Vehicles</h2>
+        </div>
+    </div>
+
+    <!-- First Div: Search Bar & Add Vehicle Button -->
+    <div class="row mb-4">
+        <div class="col-md-6">
+            <!-- Search Form -->
+            <form id="vehicle-search-form" class="input-group">
+                <input type="text" class="form-control" id="search-input" placeholder="Search vehicles..." />
+                <button type="button" class="btn btn-primary" id="search-btn">Search</button>
+            </form>
+        </div>
+        <div class="col-md-6 text-end">
+            <!-- Add Vehicle Button -->
+            <button type="button" class="btn btn-success" id="add-vehicle-btn">Add New Vehicle</button>
+        </div>
+    </div>
+
+    <!-- Second Div: Vehicles Table -->
+    <div class="row">
+        <div class="col-md-12">
+            <table class="table table-bordered table-striped" id="vehicles-table">
+                <thead>
+                    <tr>
+                        <th>ID</th>
+                        <th>Plate</th>
+                        <th>Make</th>
+                        <th>Model</th>
+                        <th>Year</th>
+                        <th>Action</th>
+                    </tr>
+                </thead>
+                <tbody id="vehicle-table-body">
+                    <!-- Raw Data will be populated here by JavaScript -->
+                </tbody>
+            </table>
+        </div>
+    </div>
+</div>
+
+<!-- JavaScript to handle data population -->
+<script>
+// Example raw vehicle data
+const vehicles = [
+    { id: 1, make: 'Toyota', model: 'Corolla', year: 2018, plate: 'ABC123' },
+    { id: 2, make: 'Ford', model: 'Focus', year: 2020, plate: 'XYZ789' },
+    { id: 3, make: 'Honda', model: 'Civic', year: 2019, plate: 'LMN456' },
+];
+
+// Function to render vehicle data in the table
+function renderVehicles(data) {
+    const tableBody = document.getElementById('vehicle-table-body');
+    tableBody.innerHTML = '';  // Clear previous data
+    data.forEach(vehicle => {
+        const row = `<tr>
+            <td>${vehicle.id}</td>
+            <td>${vehicle.plate}</td>
+            <td>${vehicle.make}</td>
+            <td>${vehicle.model}</td>
+            <td>${vehicle.year}</td>
+            <td><a href="{% url 'vehicle_detail_page' vehicle.id %}">View</a></td>
+        </tr>`;
+        tableBody.innerHTML += row;
+    });
+}
+
+// Initial render of the vehicles (raw data)
+renderVehicles(vehicles);
+
+// Search button event handler
+document.getElementById('search-btn').addEventListener('click', function() {
+    const query = document.getElementById('search-input').value.toLowerCase();
+    const filteredVehicles = vehicles.filter(vehicle =>
+        vehicle.make.toLowerCase().includes(query) ||
+        vehicle.model.toLowerCase().includes(query) ||
+        vehicle.plate.toLowerCase().includes(query)
+    );
+    renderVehicles(filteredVehicles);
+});
+
+// Add vehicle button (Currently, no functionality for now)
+document.getElementById('add-vehicle-btn').addEventListener('click', function() {
+    alert('Add new vehicle functionality goes here.');
+});
+</script>
+{% endblock %}

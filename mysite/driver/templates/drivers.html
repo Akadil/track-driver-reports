@@ -1,0 +1,94 @@
+{% extends 'base.html' %}
+
+{% block title %}Drivers - GSS Driver Report{% endblock %}
+
+{% block content %}
+<div class="container mt-4">
+    <div class="row">
+        <div class="col-md-12">
+            <h2>All Drivers</h2>
+        </div>
+    </div>
+
+    <!-- First Div: Search Bar & Add Driver Button -->
+    <div class="row mb-4">
+        <div class="col-md-6">
+            <!-- Search Form -->
+            <form id="driver-search-form" class="input-group">
+                <input type="text" class="form-control" id="search-input" placeholder="Search drivers..." />
+                <button type="button" class="btn btn-primary" id="search-btn">Search</button>
+            </form>
+        </div>
+        <div class="col-md-6 text-end">
+            <!-- Add Driver Button -->
+            <button type="button" class="btn btn-success" id="add-driver-btn">Add New Driver</button>
+        </div>
+    </div>
+
+    <!-- Second Div: Drivers Table -->
+    <div class="row">
+        <div class="col-md-12">
+            <table class="table table-bordered table-striped" id="drivers-table">
+                <thead>
+                    <tr>
+                        <th>Driver ID</th>
+                        <th>Name</th>
+                        <th>License Number</th>
+                        <th>Phone</th>
+                        <th>Email</th>
+                    </tr>
+                </thead>
+                <tbody id="driver-table-body">
+                    <!-- Raw Data will be populated here by JavaScript -->
+                </tbody>
+            </table>
+        </div>
+    </div>
+</div>
+
+<!-- JavaScript to handle data population -->
+<script>
+// Example raw driver data
+const drivers = [
+    { id: 1, name: 'John Doe', license: 'DL12345', phone: '555-1234', email: 'john@example.com' },
+    { id: 2, name: 'Jane Smith', license: 'DL67890', phone: '555-5678', email: 'jane@example.com' },
+    { id: 3, name: 'Sam Brown', license: 'DL11223', phone: '555-1122', email: 'sam@example.com' },
+];
+
+// Function to render driver data in the table
+function renderDrivers(data) {
+    const tableBody = document.getElementById('driver-table-body');
+    tableBody.innerHTML = '';  // Clear previous data
+    data.forEach(driver => {
+        const row = `<tr>
+            <td>${driver.id}</td>
+            <td>${driver.name}</td>
+            <td>${driver.license}</td>
+            <td>${driver.phone}</td>
+            <td>${driver.email}</td>
+        </tr>`;
+        tableBody.innerHTML += row;
+    });
+}
+
+// Initial render of the drivers (raw data)
+renderDrivers(drivers);
+
+// Search button event handler
+document.getElementById('search-btn').addEventListener('click', function() {
+    const query = document.getElementById('search-input').value.toLowerCase();
+    const filteredDrivers = drivers.filter(driver =>
+        driver.name.toLowerCase().includes(query) ||
+        driver.license.toLowerCase().includes(query) ||
+        driver.phone.toLowerCase().includes(query) ||
+        driver.email.toLowerCase().includes(query)
+    );
+    renderDrivers(filteredDrivers);
+});
+
+// Add driver button (Currently, no functionality for now)
+document.getElementById('add-driver-btn').addEventListener('click', function() {
+    alert('Add new driver functionality goes here.');
+});
+</script>
+{% endblock %}
